@@ -1,6 +1,9 @@
-/* Dashboard.scss */
+// dashboard.scss
+@import "./../../colors.scss";
 
 .dashboard-container {
+  background: $background;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,63 +11,77 @@
 
   .user-info {
     margin-bottom: 20px;
+    color: white;
 
     p {
+      margin: 0;
       font-size: 18px;
     }
 
     button {
-      margin-top: 10px;
-      padding: 5px 10px;
-      background-color: #e74c3c;
-      color: #fff;
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
 
       &:hover {
-        background-color: #c0392b;
+        background-color: #45a049;
       }
     }
   }
 
   .received-mess,
-  .send-mess,
-  .sent-mess {
+  .send-mess {
     width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
 
     h1 {
-      font-size: 18px;
-      margin-bottom: 10px;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
       button {
-        margin-left: 10px;
-        font-size: 14px;
-        padding: 5px 10px;
-        background-color: #3498db;
-        color: #fff;
+        background-color: #4caf50;
+        color: white;
+        padding: 8px 12px;
         border: none;
+        border-radius: 4px;
         cursor: pointer;
 
         &:hover {
-          background-color: #2980b9;
+          background-color: #45a049;
         }
       }
     }
+  }
 
+  .send-mess {
     a {
-      display: block;
-      margin-bottom: 20px;
-      padding: 10px;
-      background-color: #2ecc71;
-      color: #fff;
-      text-align: center;
       text-decoration: none;
-      font-size: 16px;
+      color: white;
+      background-color: #4caf50;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0;
 
       &:hover {
-        background-color: #27ae60;
+        background-color: #45a049;
       }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .received-mess,
+    .send-mess {
+      width: 100%;
+      margin: 0;
     }
   }
 }

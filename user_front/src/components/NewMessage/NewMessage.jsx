@@ -24,9 +24,7 @@ const NewMessage = ({ userId }) => {
       try {
         const response = await axios.get("/api/users", { params: { token } });
         setUsersList(response.data.users);
-        setAvailableRecipients(
-          response.data.users.map((user) => user.username)
-        );
+        setAvailableRecipients(response.data.users.map((user) => user.email));
       } catch (err) {
         setError("Błąd podczas pobierania listy użytkowników");
         console.error(err.response ? err.response.data : err.message);
@@ -40,7 +38,7 @@ const NewMessage = ({ userId }) => {
     if (usersList) {
       setFilteredUsers(
         usersList.filter((user) =>
-          user.username.toLowerCase().includes(selectedRecipient.toLowerCase())
+          user.email.toLowerCase().includes(selectedRecipient.toLowerCase())
         )
       );
     }
@@ -49,7 +47,7 @@ const NewMessage = ({ userId }) => {
   const handleSendMessage = async () => {
     try {
       const recipient = filteredUsers.find(
-        (user) => user.username === selectedRecipient
+        (user) => user.email === selectedRecipient
       )?.email;
 
       if (!recipient) {
@@ -82,7 +80,6 @@ const NewMessage = ({ userId }) => {
           onChange={(e) => setSelectedRecipient(e.target.value)}
         />
         <datalist id="users">
-          {/* Użyj dostępnych odbiorców zamiast filteredUsers */}
           {availableRecipients.map((recipient) => (
             <option key={recipient} value={recipient} />
           ))}

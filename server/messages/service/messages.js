@@ -10,32 +10,15 @@ const getMessages = async (req, res) => {
     if (!decoded.email) {
       return res.status(200).json({ success: false });
     }
+    console.log(decoded);
 
-    const recipientId = await findBy(decoded.email, "email", "id");
-
-    const receivedMessages = await Messages.find({ recipient: recipientId });
-    const sentMessages = await Messages.find({ sender: recipientId });
-
-    await Messages.updateMany({ recipient: recipientId }, { read: true });
-
-    const sentMessagesCopy = await Promise.all(
-      sentMessages.map(async (message) => {
-        const recipientEmail = await findBy(message.recipient, "_id", "email");
-        return { ...message.toJSON(), recipient: recipientEmail };
-      })
-    );
-
-    const receivedMessagesCopy = await Promise.all(
-      receivedMessages.map(async (message) => {
-        const senderEmail = await findBy(message.sender, "_id", "email");
-        return { ...message.toJSON(), sender: senderEmail };
-      })
-    );
+    const receivedMessages = await Messages.find({ receiver: decoded.email });
+    const sentMessages = await Messages.find({ sender: decoded.email });
 
     return res.status(200).json({
       success: true,
-      sentMessages: sentMessagesCopy,
-      receivedMessages: receivedMessagesCopy,
+      sentMessages,
+      receivedMessages,
     });
   } catch (error) {
     console.error(error);
@@ -68,8 +51,33 @@ const addMessage = async (req, res) => {
   }
 };
 
+const deleteMessage = async (req, res) => {
+  try {
+    const messageId = req.params.id;
+
+    const message = await Messages.findById(messageId);
+    if (!message) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Message not found" });
+    }
+
+    await Messages.findByIdAndDelete(messageId);
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Message deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getMessages,
   addMessage,
+  deleteMessage,
   findBy,
 };

@@ -64,12 +64,6 @@ const Dashboard = () => {
       <div className="send-mess">
         <Link to="/NewMessage">Nowa Wiadomość</Link>
       </div>
-      <div className="sent-mess">
-        <h1>
-          Wysłane <button onClick={handleRefreshMessages}>Odśwież</button>
-        </h1>
-        <Messages userId={userId} messages={sentMessages} />
-      </div>
     </div>
   );
 };
