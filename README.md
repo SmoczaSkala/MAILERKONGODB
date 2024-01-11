@@ -9,7 +9,7 @@ Witam w projekcie mailer, który ostał utworzony we współpracy z Kongo_DB
 - Informacja o dacie i godzinie wysłania wiadomości
 - Wylogowanie (niszczenie tokena)
 - Usuwanie wiadomości
+- Wysyłanie wiadomości
 - RWD
 - W trakcie realizacji:
-- Wysyłanie wiadomości
 - Informacja, czy wiadomość została przeczytana
