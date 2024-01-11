@@ -62,7 +62,7 @@ const NewMessage = ({ userId }) => {
     if (usersList) {
       setFilteredUsers(
         usersList.filter((user) => {
-          console.log(user); // Log the user object
+          console.log(user); // NIE USUWAĆ!!!
           return (
             user.email &&
             user.email.toLowerCase().includes(selectedRecipient.toLowerCase())
