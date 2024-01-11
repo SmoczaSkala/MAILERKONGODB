@@ -6,7 +6,6 @@ const Messages = ({ userId }) => {
   const [receivedMessages, setReceivedMessages] = useState([]);
   const [sentMessages, setSentMessages] = useState([]);
 
-  // Przenieś definicję fetchMessages poza useEffect
   const fetchMessages = async () => {
     try {
       const response = await axios.get(
