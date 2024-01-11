@@ -47,11 +47,12 @@ const NewMessage = ({ userId }) => {
   }, [token, setError]);
 
   useEffect(() => {
-    // Filtruj użytkowników na podstawie wpisanego tekstu
     if (usersList) {
       setFilteredUsers(
-        usersList.filter((user) =>
-          user.username.toLowerCase().includes(selectedRecipient.toLowerCase())
+        usersList.filter(
+          (user) =>
+            user.email &&
+            user.email.toLowerCase().includes(selectedRecipient.toLowerCase())
         )
       );
     }
@@ -86,6 +87,7 @@ const NewMessage = ({ userId }) => {
   return (
     <div className="new-message-container">
       <label className="message-label">
+        Odbiorca:
         <input
           type="text"
           list="users"
