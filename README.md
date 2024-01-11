@@ -1,6 +1,6 @@
 #Witam w projekcie mailer, który ostał utworzony we współpracy z Kongo_DB
 
-Zrobione:
+##Zrobione:
 - Logowanie dla użytkownika (admin też może się zalogować)
 - Przycisk do obierania wiadomości
 - Odbieranie wiadomości na starcie
@@ -9,7 +9,7 @@ Zrobione:
 - Wylogowanie (niszczenie tokena)
 - Usuwanie wiadomości
 - RWD
-W trakcie realizacji:
+##W trakcie realizacji:
 - Wysyłanie wiadomości
 - Informacja, czy wiadomość została przeczytana
 - Podpowiadanie dostępnych użytkowników, do których możemy wysłać wiadomość
