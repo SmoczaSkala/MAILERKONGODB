@@ -38,12 +38,23 @@ const findBy = async (search, by, what) => {
 
 const addMessage = async (req, res) => {
   try {
-    const token = req.query.token;
+    const token = req.body.token;
     const decoded = jwt.verify(token, "mailer123");
 
     if (!decoded.email) {
       return res.status(200).json({ success: false });
     }
+
+    const newEmail = {
+      sender: decoded.email,
+      receiver: req.body.receiver,
+      title: "req.body.title",
+      content: req.body.content,
+    };
+
+    const message = await Messages.create(newEmail);
+
+    message.save();
 
     return res.status(200).json({ success: true });
   } catch (error) {
