@@ -1,24 +1,37 @@
 const Users = require("./../../models/users");
 const jwt = require("jsonwebtoken");
-
 const getUsers = async (req, res) => {
   try {
     const token = req.query.token;
-    const decoded = jwt.verify(token, "mailer123");
 
-    if (!decoded.admin) {
-      return res.status(200).json({ success: false });
+    if (!token) {
+      return res.status(400).json({ success: false, message: "Missing token" });
     }
 
-    const users = await Users.find({}, { email: 1, _id: 0 });
+    try {
+      const decoded = jwt.verify(token, "mailer123");
 
-    return res.status(200).json({
-      success: true,
-      users: users.map((user) => ({ email: user.email })),
-    });
+      if (!decoded.admin) {
+        return res
+          .status(200)
+          .json({ success: false, message: "Not authorized" });
+      }
+
+      const users = await Users.find({}, { email: 1, _id: 0 });
+
+      return res.status(200).json({
+        success: true,
+        users: users.map((user) => ({ email: user.email })),
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ success: false });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 

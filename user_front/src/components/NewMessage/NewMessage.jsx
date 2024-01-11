@@ -20,25 +20,38 @@ const NewMessage = ({ userId }) => {
   }, []);
 
   useEffect(() => {
-    const fetchUsersList = async () => {
-      try {
-        const response = await axios.get("/api/users", { params: { token } });
-        setUsersList(response.data.users);
-        setAvailableRecipients(response.data.users.map((user) => user.email));
-      } catch (err) {
-        setError("Błąd podczas pobierania listy użytkowników");
-        console.error(err.response ? err.response.data : err.message);
-      }
-    };
+    if (token) {
+      const fetchUsersList = async () => {
+        try {
+          const response = await axios.get("/api/users", { params: { token } });
 
-    fetchUsersList();
+          if (response.data.users) {
+            setUsersList(response.data.users);
+            setAvailableRecipients(
+              response.data.users.map((user) => user.email)
+            );
+          } else {
+            setUsersList([]);
+            setAvailableRecipients([]);
+          }
+
+          console.log(response);
+        } catch (err) {
+          setError("Błąd podczas pobierania listy użytkowników");
+          console.error(err.response ? err.response.data : err.message);
+        }
+      };
+
+      fetchUsersList();
+    }
   }, [token, setError]);
 
   useEffect(() => {
+    // Filtruj użytkowników na podstawie wpisanego tekstu
     if (usersList) {
       setFilteredUsers(
         usersList.filter((user) =>
-          user.email.toLowerCase().includes(selectedRecipient.toLowerCase())
+          user.username.toLowerCase().includes(selectedRecipient.toLowerCase())
         )
       );
     }
@@ -48,19 +61,20 @@ const NewMessage = ({ userId }) => {
     try {
       const recipient = filteredUsers.find(
         (user) => user.email === selectedRecipient
-      )?.email;
+      );
 
       if (!recipient) {
         setError("Nieprawidłowy odbiorca");
         return;
       }
-
-      await axios.post("/api/messages", {
+      const response = await axios.post("/api/messages", {
         token,
         sender: userId,
-        recipient,
+        receiver: recipient.email,
         content,
       });
+
+      console.log(response.data);
 
       setSuccessMessage("Wiadomość została wysłana pomyślnie.");
     } catch (err) {
@@ -72,7 +86,6 @@ const NewMessage = ({ userId }) => {
   return (
     <div className="new-message-container">
       <label className="message-label">
-        Odbiorca:
         <input
           type="text"
           list="users"
