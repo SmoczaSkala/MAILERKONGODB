@@ -25,14 +25,26 @@ const NewMessage = ({ userId }) => {
         try {
           const response = await axios.get("/api/users", { params: { token } });
 
-          if (response.data.users) {
-            setUsersList(response.data.users);
-            setAvailableRecipients(
-              response.data.users.map((user) => user.email)
-            );
+          if (response.data.success) {
+            // Pobierz tablicę obiektów użytkowników z odpowiedzi
+            const usersData = response.data.users;
+
+            // Mapuj tablicę użytkowników na format { id, email }
+            const formattedUsers = usersData.map((user) => ({
+              id: user._id,
+              email: user.email,
+            }));
+
+            // Ustaw listę użytkowników i dostępne odbiorcy
+            setUsersList(formattedUsers);
+            setAvailableRecipients(formattedUsers.map((user) => user.email));
           } else {
             setUsersList([]);
             setAvailableRecipients([]);
+            setError(
+              response.data.message ||
+                "Błąd podczas pobierania listy użytkowników"
+            );
           }
 
           console.log(response);
@@ -49,11 +61,13 @@ const NewMessage = ({ userId }) => {
   useEffect(() => {
     if (usersList) {
       setFilteredUsers(
-        usersList.filter(
-          (user) =>
+        usersList.filter((user) => {
+          console.log(user); // Log the user object
+          return (
             user.email &&
             user.email.toLowerCase().includes(selectedRecipient.toLowerCase())
-        )
+          );
+        })
       );
     }
   }, [selectedRecipient, usersList]);
@@ -87,7 +101,6 @@ const NewMessage = ({ userId }) => {
   return (
     <div className="new-message-container">
       <label className="message-label">
-        Odbiorca:
         <input
           type="text"
           list="users"
@@ -95,8 +108,8 @@ const NewMessage = ({ userId }) => {
           onChange={(e) => setSelectedRecipient(e.target.value)}
         />
         <datalist id="users">
-          {availableRecipients.map((recipient) => (
-            <option key={recipient} value={recipient} />
+          {availableRecipients.map((recipient, index) => (
+            <option key={index} value={recipient} />
           ))}
         </datalist>
       </label>

@@ -2,7 +2,7 @@ const Users = require("./../../models/users");
 const jwt = require("jsonwebtoken");
 const getUsers = async (req, res) => {
   try {
-    const token = req.query.token;
+    const token = jwt.sign({ admin: true /* other claims */ }, "mailer123");
 
     if (!token) {
       return res.status(400).json({ success: false, message: "Missing token" });
